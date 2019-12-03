@@ -1,58 +1,17 @@
-﻿apiVersion: radix.equinor.com/v1
+apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
   name: moey
 spec:
-  build:
-    secrets:
-      - SECRET_1
-      - SECRET_2
   environments:
     - name: dev
       build:
         from: master
     - name: prod
   components:
-    - name: frontend
-      src: frontend
-      ports:
-        - name: http
-          port: 80
+    - name: main
+      src: "."
       publicPort: http
-      environmentConfig:
-        - environment: prod
-          monitoring: true
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
-              cpu: "200m"
-    - name: backend
-      src: backend
       ports:
-        - name: http
-          port: 5000
-      environmentConfig:
-        - environment: dev
-          variables:
-            DB_HOST: "db-dev"
-            DB_PORT: "1234"
-        - environment: prod
-          replicas: 2
-          variables:
-            DB_HOST: "db-prod"
-            DB_PORT: "9876"
-      secrets:
-        - DB_PASS
-  dnsAppAlias:
-    environment: prod
-    component: frontend
-  dnsExternalAlias:
-    - alias: some.alias.com
-      environment: prod
-      component: frontend
-    - alias: another.alias.com
-      environment: prod
-      component: frontend
+       - name: http
+         port: 80
